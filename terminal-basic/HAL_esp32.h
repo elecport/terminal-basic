@@ -28,6 +28,9 @@
 
 #include "HAL_arduino.h"
 
+// ODROID-GO Hardware support
+#define HAL_ESP32_ODROIDGO 1
+
 #if HAL_NVRAM
 
 // Size of the SPIFFS file, used as NVRAM storage
@@ -60,4 +63,3 @@ void analogWrite(uint8_t, uint8_t);
 #endif /* HAL_BUZZER */
 
 #endif /* HAL_ESP32_H */
-
