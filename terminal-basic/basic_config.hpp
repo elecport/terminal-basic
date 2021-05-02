@@ -2,7 +2,7 @@
  * Terminal-BASIC is a lightweight BASIC-like language interpreter
  * 
  * Copyright (C) 2016-2018 Andrey V. Skvortsov <starling13@mail.ru>
- * Copyright (C) 2019,2020 Terminal-BASIC team
+ * Copyright (C) 2019-2021 Terminal-BASIC team
  *     <https://bitbucket.org/%7Bf50d6fee-8627-4ce4-848d-829168eedae5%7D/>
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -44,7 +44,7 @@
 		 * SIN COS TAN COT
 		 */
 		#define M_TRIGONOMETRIC         1
-		#define M_HYPERBOLIC            0
+		#define M_HYPERBOLIC            1
 		/*
 		 * ACS ASN ATN
 		 */
@@ -52,7 +52,7 @@
 		/*
 		 * CBR (cubic root) ...
 		 */
-		#define M_ADDITIONAL            0
+		#define M_ADDITIONAL            1
 	#endif // USEMATH
 #endif // USE_REALS
 
@@ -117,14 +117,14 @@
 /*
  * External memory filesystem module
  */
-#define CONF_USE_EXTMEMFS         0
+#define CONF_USE_EXTMEMFS         1
 #if CONF_USE_EXTMEMFS
 	// Unix-like file operations
 	#define USE_FILEOP 1
 #endif
 
 // Use text error strings
-#define CONF_ERROR_STRINGS 0
+#define CONF_ERROR_STRINGS 1
 
 // Arduino IO module
 #define CONF_MODULE_ARDUINOIO      0
@@ -169,12 +169,12 @@
 /*
  * GFX module
  */
-#define USE_GFX          0
+#define USE_GFX          1
 #if USE_GFX
 // Use drawing functions with explisit color setting
-#define GFX_EXP_COLOR 1
+#define GFX_EXP_COLOR 0
 // Serial binary graphics protocol
-#define SERIAL_GFX    0
+#define SERIAL_GFX    1
 #endif
 
 /*
@@ -251,7 +251,7 @@
 #endif
 
 // Use multiterminal mode
-#define BASIC_MULTITERMINAL       0
+#define BASIC_MULTITERMINAL   0
 
 /*
  * Max size of the program line

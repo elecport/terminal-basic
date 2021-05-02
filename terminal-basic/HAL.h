@@ -248,6 +248,8 @@ typedef enum {
 	HAL_GFX_NUMCOLORS
 } HAL_gfx_color_t;
 
+void HAL_gfx_setmode(uint8_t);
+
 /**
  * @param fgcolor
  */

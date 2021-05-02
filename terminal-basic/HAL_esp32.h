@@ -2,7 +2,7 @@
  * Terminal-BASIC is a lightweight BASIC-like language interpreter
  * 
  * Copyright (C) 2016-2018 Andrey V. Skvortsov <starling13@mail.ru>
- * Copyright (C) 2019,2020 Terminal-BASIC team
+ * Copyright (C) 2019,2021 Terminal-BASIC team
  *     <https://bitbucket.org/%7Bf50d6fee-8627-4ce4-848d-829168eedae5%7D/>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -27,9 +27,6 @@
 #define HAL_ESP32_H
 
 #include "HAL_arduino.h"
-
-// ODROID-GO Hardware support
-#define HAL_ESP32_ODROIDGO 1
 
 #if HAL_NVRAM
 
@@ -61,5 +58,15 @@ void analogWrite(uint8_t, uint8_t);
 #define HAL_BUZZER_ESP32 HAL_BUZZER_ESP32_PWM
 
 #endif /* HAL_BUZZER */
+
+/* ODROID-GO Hardware support */
+#define HAL_ESP32_ODROIDGO 1
+#if HAL_ESP32_ODROIDGO
+/* Use ODROID-GO qwerty keyboard for input */
+#define HAL_ESP32_ODROIDGO_QWERTY 1
+#if HAL_GFX
+#define HAL_ESP32_ODROIDGO_GFX 1
+#endif
+#endif
 
 #endif /* HAL_ESP32_H */

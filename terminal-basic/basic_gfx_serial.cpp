@@ -185,9 +185,10 @@ GFXModule::command_screen(Interpreter &i)
 {
 	INT x;
 	if (getIntegerFromStack(i, x)) {
-		i.print(char(ASCII::DLE));
+		/*i.print(char(ASCII::DLE));
 		i.print(char(GFXTERM::Command::MODE));
-		i.print(char(x));
+		i.print(char(x));*/
+    HAL_gfx_setmode(x);
 		return true;
 	}
 	return false;
