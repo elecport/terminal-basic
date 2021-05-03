@@ -58,19 +58,24 @@ public:
     GO.lcd.setTextSize(1);
 
     if (mode == 0) {
+      GO.lcd.setTextFont(3);
+      m_charWidth = 6, m_charHeight = 8;
+    } else if (mode == 1) {
       GO.lcd.setTextFont(4);
       m_charWidth = 8, m_charHeight = 10;
     } else {
-      GO.lcd.setTextFont(3);
-      m_charWidth = 6, m_charHeight = 8;
+      GO.lcd.setTextFont(5);
+      m_charWidth = 8, m_charHeight = 16;
     }
       
     GO.lcd.clearDisplay();
 
     if (mode == 0)
+      BufferedTerminal::begin(30, 53);
+    else if (mode == 1)
       BufferedTerminal::begin(24, 40);
     else
-      BufferedTerminal::begin(30, 53);
+      BufferedTerminal::begin(15, 40);
     clear();
   }
 
