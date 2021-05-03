@@ -328,22 +328,37 @@ void HAL_gfx_setmode(uint8_t mode)
   GOScreen->begin(mode);
 }
 
+static const uint16_t gfx_colors[] = {
+  0,
+  TFT_BLACK,   // HAL_GFX_COLOR_WHITE
+  TFT_WHITE,   // HAL_GFX_COLOR_BLACK
+  TFT_RED,     // 2
+  TFT_GREEN,   // 3
+  TFT_BLUE,    // 4
+  TFT_CYAN,    // 5
+  TFT_MAGENTA, // 6
+  TFT_YELLOW
+};
+
+static uint16_t gfx_active_colors[2] = {TFT_WHITE, TFT_BLACK};
+
 void
 HAL_gfx_setColor(HAL_gfx_color_t color)
 {
-
+  gfx_active_colors[0] = gfx_colors[color];
 }
 
 void
 HAL_gfx_setBgColor(HAL_gfx_color_t color)
 {
-
+  gfx_active_colors[1] = gfx_colors[color];
 }
 
 void
 HAL_gfx_point(uint16_t x, uint16_t y)
 {
-
+  if (gfx_active_colors[0] != HAL_GFX_NOTACOLOR)
+    GO.lcd.drawPixel(x, y, gfx_active_colors[0]);
 }
 
 static uint16_t linex = 0, liney = 0;
@@ -351,25 +366,39 @@ static uint16_t linex = 0, liney = 0;
 void
 HAL_gfx_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 {
-
-}
-
-void
-HAL_gfx_rect(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
-{
-
+  if (gfx_active_colors[0] != HAL_GFX_NOTACOLOR)
+    GO.lcd.drawLine(x1, y1, x2, y2, gfx_active_colors[0]);
+  
+  linex = x2;
+  liney = y2;
 }
 
 void
 HAL_gfx_lineto(uint16_t x, uint16_t y)
 {
+  if (gfx_active_colors[0] != HAL_GFX_NOTACOLOR)
+    GO.lcd.drawLine(linex, liney, x, y, gfx_active_colors[0]);
+  
+  linex = x;
+  liney = y;
+}
 
+void
+HAL_gfx_rect(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
+{
+  if (gfx_active_colors[1] != HAL_GFX_NOTACOLOR)
+    GO.lcd.fillRect(x, y, w, h, gfx_active_colors[1]);
+  if (gfx_active_colors[0] != HAL_GFX_NOTACOLOR)
+    GO.lcd.drawRect(x, y, w, h, gfx_active_colors[0]);
 }
 
 void
 HAL_gfx_circle(uint16_t x, uint16_t y, uint16_t r)
 {
-
+  if (gfx_active_colors[1] != HAL_GFX_NOTACOLOR)
+    GO.lcd.fillCircle(x, y, r, gfx_active_colors[1]);
+  if (gfx_active_colors[0] != HAL_GFX_NOTACOLOR)
+    GO.lcd.drawCircle(x, y, r, gfx_active_colors[0]);
 }
 
 #if !HAL_GFX_EXPCOLOR_SIMPL
