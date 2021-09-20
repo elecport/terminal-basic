@@ -48,7 +48,7 @@ public:
     memset(m_screenBuffer[1], char(VT100::TextAttr::NO_ATTR), m_rows * m_columns);
     GO.lcd.fillScreen(TFT_BLACK);
     setCursor(0, 0);
-    drawCursor(true);
+    //drawCursor(true);
   }
 
   void
@@ -173,8 +173,10 @@ protected:
 
   void writeChar(uint8_t c) override
   {
-    m_lockCursor = true;
-    drawCursor(false);
+    if (m_cursorEnable) {
+      m_lockCursor = true;
+      drawCursor(false);
+    }
     switch (c) {
     case '\n':
       if (m_row < m_rows - 1)
@@ -202,17 +204,21 @@ protected:
       } else
         ++m_column;
     }
-    drawCursor(true);
-    m_lockCursor = false;
+    if (m_cursorEnable) {
+      drawCursor(true);
+      m_lockCursor = false;
+    }
   }
 
   void setCursor(uint8_t x, uint8_t y) override
   {
-    drawCursor(false);
+    if (m_cursorEnable)
+      drawCursor(false);
     m_row = y % m_rows;
     m_column = x % m_columns;
     GO.lcd.setCursor(m_column * m_charWidth, m_row * m_charHeight);
-    drawCursor(true);
+    if (m_cursorEnable)
+      drawCursor(true);
   }
 
   void addAttribute(VT100::TextAttr ta) override
@@ -328,37 +334,43 @@ void HAL_gfx_setmode(uint8_t mode)
   GOScreen->begin(mode);
 }
 
+void
+HAL_gfx_setCursor(BOOLEAN state)
+{
+  GOScreen->enableCursor(state);
+}
+
 static const uint16_t gfx_colors[] = {
   0,
-  TFT_BLACK,   // HAL_GFX_COLOR_WHITE
-  TFT_WHITE,   // HAL_GFX_COLOR_BLACK
-  TFT_RED,     // 2
-  TFT_GREEN,   // 3
-  TFT_BLUE,    // 4
-  TFT_CYAN,    // 5
-  TFT_MAGENTA, // 6
+  TFT_WHITE,   // HAL_GFX_COLOR_WHITE
+  TFT_BLACK,   // HAL_GFX_COLOR_BLACK
+  TFT_RED,     // 
+  TFT_GREEN,   // 
+  TFT_BLUE,    // 
+  TFT_CYAN,    // 
+  TFT_MAGENTA, //
   TFT_YELLOW
 };
 
-static uint16_t gfx_active_colors[2] = {TFT_WHITE, TFT_BLACK};
+static uint16_t gfx_active_colors[2] = {HAL_GFX_COLOR_WHITE, HAL_GFX_COLOR_BLACK};
 
 void
 HAL_gfx_setColor(HAL_gfx_color_t color)
 {
-  gfx_active_colors[0] = gfx_colors[color];
+  gfx_active_colors[0] = color;
 }
 
 void
 HAL_gfx_setBgColor(HAL_gfx_color_t color)
 {
-  gfx_active_colors[1] = gfx_colors[color];
+  gfx_active_colors[1] = color;
 }
 
 void
 HAL_gfx_point(uint16_t x, uint16_t y)
 {
   if (gfx_active_colors[0] != HAL_GFX_NOTACOLOR)
-    GO.lcd.drawPixel(x, y, gfx_active_colors[0]);
+    GO.lcd.drawPixel(x, y, gfx_colors[gfx_active_colors[0]]);
 }
 
 static uint16_t linex = 0, liney = 0;
@@ -367,7 +379,7 @@ void
 HAL_gfx_line(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 {
   if (gfx_active_colors[0] != HAL_GFX_NOTACOLOR)
-    GO.lcd.drawLine(x1, y1, x2, y2, gfx_active_colors[0]);
+    GO.lcd.drawLine(x1, y1, x2, y2, gfx_colors[gfx_active_colors[0]]);
   
   linex = x2;
   liney = y2;
@@ -377,7 +389,7 @@ void
 HAL_gfx_lineto(uint16_t x, uint16_t y)
 {
   if (gfx_active_colors[0] != HAL_GFX_NOTACOLOR)
-    GO.lcd.drawLine(linex, liney, x, y, gfx_active_colors[0]);
+    GO.lcd.drawLine(linex, liney, x, y, gfx_colors[gfx_active_colors[0]]);
   
   linex = x;
   liney = y;
@@ -387,18 +399,18 @@ void
 HAL_gfx_rect(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 {
   if (gfx_active_colors[1] != HAL_GFX_NOTACOLOR)
-    GO.lcd.fillRect(x, y, w, h, gfx_active_colors[1]);
+    GO.lcd.fillRect(x, y, w, h, gfx_colors[gfx_active_colors[1]]);
   if (gfx_active_colors[0] != HAL_GFX_NOTACOLOR)
-    GO.lcd.drawRect(x, y, w, h, gfx_active_colors[0]);
+    GO.lcd.drawRect(x, y, w, h, gfx_colors[gfx_active_colors[0]]);
 }
 
 void
 HAL_gfx_circle(uint16_t x, uint16_t y, uint16_t r)
 {
   if (gfx_active_colors[1] != HAL_GFX_NOTACOLOR)
-    GO.lcd.fillCircle(x, y, r, gfx_active_colors[1]);
+    GO.lcd.fillCircle(x, y, r, gfx_colors[gfx_active_colors[1]]);
   if (gfx_active_colors[0] != HAL_GFX_NOTACOLOR)
-    GO.lcd.drawCircle(x, y, r, gfx_active_colors[0]);
+    GO.lcd.drawCircle(x, y, r, gfx_colors[gfx_active_colors[0]]);
 }
 
 #if !HAL_GFX_EXPCOLOR_SIMPL

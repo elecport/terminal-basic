@@ -67,6 +67,6 @@ void analogWrite(uint8_t, uint8_t);
 #if HAL_GFX
 #define HAL_ESP32_ODROIDGO_GFX 1
 #endif
-#endif
+#endif /* HAL_ESP32_ODROIDGO */
 
 #endif /* HAL_ESP32_H */
