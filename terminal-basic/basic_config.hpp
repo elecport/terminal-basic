@@ -251,7 +251,7 @@
 #endif
 
 // Use multiterminal mode
-#define BASIC_MULTITERMINAL   0
+#define BASIC_MULTITERMINAL       0
 
 /*
  * Max size of the program line

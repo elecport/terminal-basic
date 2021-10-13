@@ -248,8 +248,6 @@ typedef enum {
 	HAL_GFX_NUMCOLORS
 } HAL_gfx_color_t;
 
-void HAL_gfx_setmode(uint8_t);
-
 /**
  * @param fgcolor
  */
@@ -341,6 +339,10 @@ void HAL_gfx_circle(uint16_t, uint16_t, uint16_t);
  * @param color
  */
 void HAL_gfx_circlec(uint16_t, uint16_t, uint16_t, HAL_gfx_color_t);
+
+void HAL_gfx_setCursor(BOOLEAN state);
+
+void HAL_gfx_setmode(uint8_t mode);
 
 #endif /* HAL_GFX */
 

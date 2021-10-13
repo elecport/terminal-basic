@@ -30,9 +30,6 @@ class BufferedTerminal : public VT100::Print
 	EXT_NOTCOPYABLE(BufferedTerminal)
 
 public:
-
-  BufferedTerminal() = default;
-
 	/**
 	 * @param rows
 	 * @param columns
@@ -48,6 +45,8 @@ public:
 	void update();
 
 protected:
+
+  BufferedTerminal() = default;
 	
 	virtual void drawCursor(bool) = 0;
 	

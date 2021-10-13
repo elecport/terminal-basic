@@ -56,8 +56,8 @@
 #define HAL_GFX_EXPCOLOR_SIMPL 1
 #endif /* HAL_GFX */
 
-#define HAL_GPIO 0
+#define HAL_GPIO 1
 
-#define HAL_BUZZER 0
+#define HAL_BUZZER 1
 
 #endif /* HAL_CONFIG_H */

@@ -37,8 +37,14 @@ class OdroidGoScreen : public BufferedTerminal
 {
 public:
 
-  OdroidGoScreen()
+  OdroidGoScreen() :
+    m_cursorEnabled(true)
   {
+  }
+
+  void enableCursor(bool newVal)
+  {
+    m_cursorEnabled = newVal;
   }
 
   void
@@ -77,6 +83,12 @@ public:
     else
       BufferedTerminal::begin(15, 40);
     clear();
+  }
+
+  void update()
+  {
+    if (m_cursorEnabled)
+      BufferedTerminal::update();
   }
 
 protected:
@@ -168,12 +180,14 @@ private:
 
   uint8_t m_charWidth, m_charHeight;
 
+  bool m_cursorEnabled;
+
   // VT100::Print interface
 protected:
 
   void writeChar(uint8_t c) override
   {
-    if (m_cursorEnable) {
+    if (m_cursorEnabled) {
       m_lockCursor = true;
       drawCursor(false);
     }
@@ -204,7 +218,7 @@ protected:
       } else
         ++m_column;
     }
-    if (m_cursorEnable) {
+    if (m_cursorEnabled) {
       drawCursor(true);
       m_lockCursor = false;
     }
@@ -212,12 +226,12 @@ protected:
 
   void setCursor(uint8_t x, uint8_t y) override
   {
-    if (m_cursorEnable)
+    if (m_cursorEnabled)
       drawCursor(false);
     m_row = y % m_rows;
     m_column = x % m_columns;
     GO.lcd.setCursor(m_column * m_charWidth, m_row * m_charHeight);
-    if (m_cursorEnable)
+    if (m_cursorEnabled)
       drawCursor(true);
   }
 
@@ -437,6 +451,7 @@ HAL_gfx_circlec(uint16_t x, uint16_t y, uint16_t r, HAL_gfx_color_t color)
 {
 
 }
+
 #endif // HAL_GFX_EXPCOLOR_SIMPL
 #endif // HAL_ESP32_ODROIDGO_GFX
 

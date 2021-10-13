@@ -49,7 +49,7 @@
      * 
      * All real number constants (1e6, 0.5, 3., .04 ... ) treated as long reals
      */
-#define USE_LONG_REALS       0
+#define USE_LONG_REALS       1
 #endif
 
 /*
@@ -60,7 +60,7 @@
  * Functions, variables and arrays of long integer type ends with double "%!"
  * symbols
  */
-#define USE_LONGINT          0
+#define USE_LONGINT          1
 
 /**
  * DUMP command support
@@ -76,7 +76,7 @@
 /*
  * Support of Darthmouth BASIC-style matrix operations
  */
-#define USE_MATRIX           0
+#define USE_MATRIX           1
 
 /**
  * Support of DATA/READ statements
@@ -86,7 +86,7 @@
 /*
  * Support of DEF FN construct
  */
-#define USE_DEFFN            0
+#define USE_DEFFN            1
 
 /*
  * DELAY command, suspends execution for N ms
@@ -106,7 +106,7 @@
 /*
  * Fast command call using C-function address
  */
-#define FAST_MODULE_CALL    0
+#define FAST_MODULE_CALL    1
 
 /*
  * Support of integer division and modulo operation
@@ -127,7 +127,7 @@
 /*
  * SAVE, LOAD and CHAIN commands support
  */
-#define USE_SAVE_LOAD        1
+#define USE_SAVE_LOAD        0
 
 /*
  * Use ANSI text attributes
