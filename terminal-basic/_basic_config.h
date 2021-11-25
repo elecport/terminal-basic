@@ -1,7 +1,7 @@
 /*
  * This file is part of Terminal-BASIC: a lightweight BASIC-like language
  * interpreter.
- * 
+ *
  * Copyright (C) 2016-2018 Andrey V. Skvortsov <starling13@mail.ru>
  * Copyright (C) 2019-2021 Terminal-BASIC team
  *     <https://github.com/terminal-basic-team>
@@ -20,45 +20,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HAL_CONFIG_H
-#define HAL_CONFIG_H
+#ifndef _BASIC_CONFIG_H
+#define _BASIC_CONFIG_H
 
 /*
- * Number of available terminals
+ * Language constants for later usage
  */
-#define HAL_TERMINAL_NUM 1
+#define LANG_EN 0 /* English */
+#define LANG_RU 1 /* Russian */
+#define LANG_FR 3 /* French */
 
-/*
- * Enable NVRAM read/write functions
- * 
- * NVRAM provides a single storage space, preserved between software runs
- */
-#define HAL_NVRAM 1
+#define OPT_SPEED 1 /* Extensive usage of switch/case constructs */
+#define OPT_SIZE  2 /* Use cascade of if/else if instead of switch/case */
 
-/*
- * Enable external memory interface
- * 
- * External memory is a simple filesystem model
- */
-#define HAL_EXTMEM 1
-#if HAL_EXTMEM
-/*
- * Maximal number of simulteniously opened files
- */
-#define HAL_EXTMEM_NUM_FILES 8
-#endif /* HAL_EXTMEM */
+#endif /* _BASIC_CONFIG_H */
 
-/*
- * Enable GFX interface functions
- */
-#define HAL_GFX 1
-#if HAL_GFX
-/* Default implementation of the explicit color setting commands */
-#define HAL_GFX_EXPCOLOR_SIMPL 1
-#endif /* HAL_GFX */
-
-#define HAL_GPIO 1
-
-#define HAL_BUZZER 1
-
-#endif /* HAL_CONFIG_H */

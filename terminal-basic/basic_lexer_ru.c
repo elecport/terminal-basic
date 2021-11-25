@@ -1,6 +1,10 @@
 /*
- * Terminal-BASIC is a lightweight BASIC-like language interpreter
- * Copyright (C) 2017-2019 Andrey V. Skvortsov <starling13@mail.ru>
+ * This file is part of Terminal-BASIC: a lightweight BASIC-like language
+ * interpreter.
+ * 
+ * Copyright (C) 2016-2018 Andrey V. Skvortsov <starling13@mail.ru>
+ * Copyright (C) 2019-2021 Terminal-BASIC team
+ *     <https://github.com/terminal-basic-team>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +26,7 @@
 
 #if CONF_LEXER_LANG == LANG_RU
 
-const uint8_t _basic_lexer_symbolsShift PROGMEM = (uint8_t)('Ä')-'A';
+const uint8_t _basic_lexer_symbolsShift PROGMEM = (uint8_t)('ÔøΩ')-'A';
 
 const uint8_t _basic_lexer_tokenTable[] PROGMEM = {
 	ASCII_NUL,
@@ -97,50 +101,50 @@ const uint8_t _basic_lexer_tokenTable[] PROGMEM = {
 #if USE_MATRIX
 	'Z', 'E', 'R',ASCII_NUL,
 #endif
-	'Ç', 'Ç', 'é', 'Ñ', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
 #if USE_DATA
-	'Ç', 'á', 'ü', 'í', 'ú', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
 #endif
-	'Ç', 'é', 'á', 'Ç', 'ê', 'Ä', 'í', ASCII_NUL,
-	'Ç', 'õ', 'Ç', 'é', 'Ñ', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
 #if USE_DATA
-	'Ñ', 'Ä', 'ç', 'ç', 'õ', 'Ö', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
 #endif
-	'Ñ', 'ã', 'ü', ASCII_NUL,
-	'Ñ', 'é', ASCII_NUL,
-	'Ö', 'ë', 'ã', 'à', ASCII_NUL,
-	'à', 'ã', 'à', ASCII_NUL,
-        'à', ASCII_NUL,
-	'ä', 'é', 'å', ASCII_NUL,
-	'ä', 'é', 'ç', 'Ö', 'ñ', ASCII_NUL,
-	'ã', 'à', 'ë', 'í', 'Ä', 'í', 'ú',  ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
+        'ÔøΩ', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ',  ASCII_NUL,
 #if USE_MATRIX
-	'å', 'Ä', 'í', ASCII_NUL,                // 23
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,                // 23
 #endif
-	'ç', 'Ä', ASCII_NUL,
-	'ç', 'Ö', ASCII_NUL,
-	'ç', 'é', 'Ç', 'Ä', 'ü', ASCII_NUL,      // 21
+	'ÔøΩ', 'ÔøΩ', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,      // 21
 #if USE_DEFFN
-	'é', 'è', 'ê', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
 #endif
 #if CONF_USE_ON_GOTO
-	'è', 'ê', 'à', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
 #endif
-	'è', 'ì', 'ë', 'ä', ASCII_NUL,
-	'è', 'ì', 'ë', 'í', 'ú', ASCII_NUL,
-	'ê', 'Ä', 'á', 'å', 'Ö', 'ê', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
 #if USE_DATA
-	'ë', 'ç', 'é', 'Ç', 'Ä', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
 #endif
 #if USESTOPCONT
-	'ë', 'í', 'é', 'è', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
 #endif
-	'í', 'é', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', ASCII_NUL,
 #if USE_DEFFN
-	'î', 'ì', 'ç', 'ä', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
 #endif
-	'ñ', 'à', 'ä', 'ã', ASCII_NUL,
-	'ò', 'Ä', 'É', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
+	'ÔøΩ', 'ÔøΩ', 'ÔøΩ', ASCII_NUL,
 	ASCII_ETX
 };
 

@@ -1,9 +1,10 @@
 /*
- * Terminal-BASIC is a lightweight BASIC-like language interpreter
+ * This file is part of Terminal-BASIC: a lightweight BASIC-like language
+ * interpreter.
  * 
  * Copyright (C) 2016-2018 Andrey V. Skvortsov <starling13@mail.ru>
  * Copyright (C) 2019-2021 Terminal-BASIC team
- *     <https://bitbucket.org/%7Bf50d6fee-8627-4ce4-848d-829168eedae5%7D/>
+ *     <https://github.com/terminal-basic-team>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,11 +33,11 @@ void HAL_esp32_odroidgo_init();
 void HAL_esp32_odroidgo_update();
 #endif // HAL_ESP32_ODROIDGO
 
-#if HAL_ESP32_EXTMEM == HAL_ESP32_EXTMEM_SD
+#if HAL_ESP32_EXTMEM == HAL_ESP32_EXTEM_SD
 #include <SD.h>
 #endif
 
-#if HAL_NVRAM || HAL_ESP32_EXTMEM == HAL_ESP32_EXTMEM_SPIFFS
+#if HAL_NVRAM || HAL_ESP32_EXTMEM == HAL_ESP32_EXTEM_SPIFFS
 #include "SPIFFS.h"
 #endif
 
@@ -48,9 +49,9 @@ static File f;
 
 static File extmem_files[HAL_EXTMEM_NUM_FILES];
 
-#if HAL_ESP32_EXTMEM == HAL_ESP32_EXTMEM_SPIFFS
+#if HAL_ESP32_EXTMEM == HAL_ESP32_EXTEM_SPIFFS
 static FS& gfs = SPIFFS;
-#elif HAL_ESP32_EXTMEM == HAL_ESP32_EXTMEM_SD
+#elif HAL_ESP32_EXTMEM == HAL_ESP32_EXTEM_SD
 static FS& gfs = SD;
 #endif
 
@@ -69,7 +70,7 @@ HAL_initialize_concrete()
   HAL_esp32_odroidgo_init();
 #endif // HAL_ESP32_ODROIDGO
   
-#if HAL_NVRAM || (HAL_ESP32_EXTMEM == HAL_ESP32_EXTMEM_SPIFFS)
+#if HAL_NVRAM || (HAL_ESP32_EXTMEM == HAL_ESP32_EXTEM_SPIFFS)
 	if (!SPIFFS.begin(true)) {
 		Serial.println("ERROR: SPIFFS.begin");
 		exit(1);
@@ -90,7 +91,7 @@ HAL_initialize_concrete()
 
 #endif // HAL_NVRAM
 
-#if HAL_EXTMEM && (HAL_ESP32_EXTMEM == HAL_ESP32_EXTMEM_SD)
+#if HAL_EXTMEM && (HAL_ESP32_EXTMEM == HAL_ESP32_EXTEM_SD)
 	if (!SD.begin()) {
 		Serial.println("ERROR: SD.begin");
 		exit(3);
@@ -103,10 +104,10 @@ __END_DECLS
 void
 HAL_finalize()
 {
-#if HAL_NVRAM || (HAL_ESP32_EXTMEM == HAL_ESP32_EXTMEM_SPIFFS)
+#if HAL_NVRAM || (HAL_ESP32_EXTMEM == HAL_ESP32_EXTEM_SPIFFS)
 	SPIFFS.end();
 #endif
-#if HAL_ESP32_EXTMEM == HAL_ESP32_EXTMEM_SD
+#if HAL_ESP32_EXTMEM == HAL_ESP32_EXTEM_SD
 	SD.end();
 #endif // HAL_ESP32_EXTMEM
 }
@@ -187,7 +188,7 @@ HAL_extmem_openfile(const char fname[13])
 	strncpy(fname_ + 1, fname, 12);
 	fname_[13] = '\0';
 
-#if HAL_ESP32_EXTMEM == HAL_ESP32_EXTMEM_SPIFFS
+#if HAL_ESP32_EXTMEM == HAL_ESP32_EXTEM_SPIFFS
 
 	if (SPIFFS.exists(fname_))
 		extmem_files[i] = SPIFFS.open(fname_, "r+");
@@ -197,7 +198,7 @@ HAL_extmem_openfile(const char fname[13])
 		Serial.println("ERROR: SPIFFS.open");
 		return 0;
 	}
-#elif HAL_ESP32_EXTMEM == HAL_ESP32_EXTMEM_SD
+#elif HAL_ESP32_EXTMEM == HAL_ESP32_EXTEM_SD
 
 	extmem_files[i] = SD.open(fname_, "r+");
 	if (!extmem_files[i]) {
@@ -263,7 +264,7 @@ HAL_extmem_getnumfiles()
 	File d = gfs.open("/");
 	if (!d || !d.isDirectory())
 		return 0;
-#if HAL_ESP32_EXTMEM == HAL_ESP32_EXTMEM_SPIFFS
+#if HAL_ESP32_EXTMEM == HAL_ESP32_EXTEM_SPIFFS
 
 	d.rewindDirectory();
 	File f = d.openNextFile();
@@ -271,7 +272,7 @@ HAL_extmem_getnumfiles()
 		++result;
 		f = d.openNextFile();
 	}
-#elif HAL_ESP32_EXTMEM == HAL_ESP32_EXTMEM_SD
+#elif HAL_ESP32_EXTMEM == HAL_ESP32_EXTEM_SD
 
 	while (true) {
 		File f = d.openNextFile();
@@ -294,7 +295,7 @@ HAL_extmem_getfilename(uint16_t num, char fname[13])
 	if (!d || !d.isDirectory())
 		return;
 
-#if HAL_ESP32_EXTMEM == HAL_ESP32_EXTMEM_SPIFFS
+#if HAL_ESP32_EXTMEM == HAL_ESP32_EXTEM_SPIFFS
 
 	d.rewindDirectory();
 	File f = d.openNextFile();
@@ -307,7 +308,7 @@ HAL_extmem_getfilename(uint16_t num, char fname[13])
 		num--;
 	}
 
-#elif HAL_ESP32_EXTMEM == HAL_ESP32_EXTMEM_SD
+#elif HAL_ESP32_EXTMEM == HAL_ESP32_EXTEM_SD
 
 	while (true) {
 		File f = d.openNextFile();

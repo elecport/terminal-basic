@@ -1,9 +1,10 @@
 /*
- * Terminal-BASIC is a lightweight BASIC-like language interpreter
+ * This file is part of Terminal-BASIC: a lightweight BASIC-like language
+ * interpreter.
  * 
  * Copyright (C) 2016-2018 Andrey V. Skvortsov <starling13@mail.ru>
- * Copyright (C) 2019,2020 Terminal-BASIC team
- *     <https://bitbucket.org/%7Bf50d6fee-8627-4ce4-848d-829168eedae5%7D/>
+ * Copyright (C) 2019-2021 Terminal-BASIC team
+ *     <https://github.com/terminal-basic-team>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,11 +43,31 @@
 #define STR_INVALID_NEXT              "�������� ������������ FOR ... NEXT"
 #define STR_RETURN_WO_GOSUB           "RETURN ��� GOSUB"
 #define STR_NO_SUCH_LINE              "��� ����� ������"
-#define STR_INVALID_VALUE_TYPE        "�������� ���"
+#define STR_INVALID_VALUE_TYPE        "�������� ��� ������"
 #define STR_NO_SUCH_ARRAY             "��� ������ �������"
-#define STR_INTEGER_EXP_EXPECTED      "��������� �����"
+#define STR_INTEGER_EXP_EXPECTED      "��������� ������������� ��������"
 #define STR_BAD_CHECKSUM              "�������� ����������� �����"
-#define STR_INVALID_TAB               "�������� �������� TAB"
+#define STR_INVALID_TAB               "�������� �������� ���������"
+#define STR_INVALID_ELEMENT_INDEX     "�������� ������ ��������"
+#define STR_SQUARE_MATRIX_EXPECTED    "��������� ���������� �������"
+#define STR_DIMENSIONS_MISMATCH       "�������������� �����������"
+#define STR_COMMAND_FAILED            "������ ���������� �������"
+#define STR_VAR_DUPLICATE             "������������� ����������"
+#define STR_FUNCTION_DUPLICATE        "������������� �������"
+#define STR_NO_SUCH_FUNCION           "��� ����� �������"
+#define STR_INSUFFICIENT_DATA         "������������ ������ ��� ������"
+
+#define STR_LICENSE_MESSAGE \
+"Copyright (C) 2016-2018 Andrey V. Skvortsov <starling13@mail.ru>\n" \
+"Copyright (C) 2019-2021 Terminal-BASIC team\n" \
+"    <https://github.com/terminal-basic-team>\n" \
+"�� �ணࠬ�� ���⠢����� ���� ������ ��������.\n" \
+"�� ᢮������ �ணࠬ��, � �� ����� ��������࠭���\n" \
+"�� �/��� �������� �� �� �᫮���� �⠭���⭮� ����⢥����\n" \
+"��業��� GNU � ⮬ ����, � ����� ��� �뫠 ��㡫�������\n" \
+"������ ᢮������� �ணࠬ����� ���ᯥ祭��; ���� ���ᨨ 3\n" \
+"��業���, ���� (�� ��襬� �롮��) �� ����� ������� ���ᨨ."
+
 
 #define STR_ERROR      "������"
 #define STR_BYTES      "����"
