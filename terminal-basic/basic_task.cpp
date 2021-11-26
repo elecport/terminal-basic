@@ -23,26 +23,48 @@
 #include "basic_task.hpp"
 #include "maintask.hpp"
 
-Task* activeTask;
-Task* newTask = nullptr;
-
-void
-setup()
+Task::Task():
+    m_halproxyStream(0)
 {
-  HAL_initialize();
+  
+}
 
-  newTask = new MainTask;
+namespace BASIC
+{
+
+Task::Task() :
+    m_interpreter(m_halproxyStream, m_halproxyStream, BASIC::SINGLE_PROGSIZE)
+{
+
+#if CONF_MODULE_ARDUINOIO
+	m_interpreter.addModule(&m_arduinoio);
+#endif
+	
+#if USE_GFX
+	m_interpreter.addModule(&m_gfx);
+#endif
+	
+#if USEMATH
+	m_interpreter.addModule(&m_math);
+#endif
+	
+#if CONF_USE_EXTMEMFS
+	m_interpreter.setSDFSModule(&m_sdfs);
+	m_interpreter.addModule(&m_sdfs);	
+#endif
 }
 
 void
-loop()
+Task::init()
 {
-  HAL_update();
-  if (newTask) {
-    delete activeTask;
-    activeTask = newTask;
-    newTask = nullptr;
-    activeTask->init();
-  }
-  activeTask->step();
+	m_interpreter.init();
 }
+
+void
+Task::step()
+{
+	if (!m_interpreter.step())
+    newTask = new MainTask;
+}
+
+} // namespace BASIC

@@ -307,6 +307,7 @@ _parser(_lexer, *this)
 #if CONF_USE_EXTMEMFS
 , m_sdfs(nullptr)
 #endif
+, m_exitFlag(false)
 {
 	_input.setTimeout(10000L);
 }
@@ -353,7 +354,7 @@ Interpreter::init()
 #endif
 }
 
-void
+bool
 Interpreter::step()
 {
 	LOG_TRACE;
@@ -461,6 +462,14 @@ Interpreter::step()
 	default:
 		break;
 	}
+
+ return !m_exitFlag;
+}
+
+void
+Interpreter::exit()
+{
+  m_exitFlag = true;
 }
 
 void

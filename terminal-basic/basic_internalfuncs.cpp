@@ -223,11 +223,24 @@ const FunctionBlock::function InternalFunctions::funcs[] PROGMEM = {
 	nullptr
 };
 
+static const char intComs[] PROGMEM = {
+  'E', 'X', 'I', 'T', ASCII_NUL,
+  ASCII_ETX
+};
+
+const FunctionBlock::command InternalFunctions::coms[] PROGMEM = {
+  InternalFunctions::func_exit,
+  nullptr
+};
+
 InternalFunctions::InternalFunctions(FunctionBlock *first) :
 FunctionBlock(first)
 {
 	functions = funcs;
 	functionTokens = reinterpret_cast<const uint8_t*>(intFuncs);
+
+  commands = coms;
+  commandTokens = reinterpret_cast<const uint8_t*>(intComs);
 }
 
 bool
@@ -251,7 +264,14 @@ InternalFunctions::func_abs(Interpreter &i)
 		if (i.pushValue(v))
 			return true;
 	}
-        return false;
+  return false;
+}
+
+bool
+InternalFunctions::func_exit(Interpreter &i)
+{
+  i.exit();
+  return true;
 }
 
 #if USE_ASC

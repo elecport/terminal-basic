@@ -254,7 +254,9 @@ public:
 	 */
 	void init();
 	// Interpreter cycle: request a string or execute one operator
-	void step();
+	bool step();
+  // Exit interpreter
+  void exit();
 	// Execute entered command (command or inputed program line)
 	void exec();
 #if USE_DATA
@@ -623,6 +625,7 @@ private:
 #if CONF_ERROR_STRINGS
 	static PGM_P const errorStrings[] PROGMEM;
 #endif
+  bool m_exitFlag;
 };
 
 } // namespace BASIC

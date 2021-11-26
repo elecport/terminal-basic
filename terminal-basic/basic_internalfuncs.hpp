@@ -35,6 +35,7 @@ public:
 	InternalFunctions(FunctionBlock* = nullptr);
 private:
 	static bool func_abs(Interpreter&);
+  static bool func_exit(Interpreter&);
 #if USE_ASC
 	static bool func_asc(Interpreter&);
 #endif
@@ -84,6 +85,7 @@ private:
 #undef ___TYP
 	
 	static const FunctionBlock::function funcs[] PROGMEM;
+  static const FunctionBlock::command coms[] PROGMEM;
 };
 
 } // namespace BASIC
