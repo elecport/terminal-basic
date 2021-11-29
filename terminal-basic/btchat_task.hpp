@@ -20,44 +20,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "basic_task.hpp"
+#include "task.hpp"
 
-namespace BASIC
+class BluetoothSerial;
+
+class BTChat : public Task
 {
+public:
 
-Task::Task(HALProxyStream& stream) :
-    ::Task(stream),
-    m_interpreter(m_halproxyStream, m_halproxyStream, BASIC::SINGLE_PROGSIZE)
-{
+	explicit BTChat(BASIC::HALProxyStream&);
 
-#if CONF_MODULE_ARDUINOIO
-	m_interpreter.addModule(&m_arduinoio);
-#endif
-	
-#if USE_GFX
-	m_interpreter.addModule(&m_gfx);
-#endif
-	
-#if USEMATH
-	m_interpreter.addModule(&m_math);
-#endif
-	
-#if CONF_USE_EXTMEMFS
-	m_interpreter.setSDFSModule(&m_sdfs);
-	m_interpreter.addModule(&m_sdfs);
-#endif
-}
+  ~BTChat() override;
 
-void
-Task::init()
-{
-	m_interpreter.init();
-}
+private:
 
-bool
-Task::step()
-{
-	return m_interpreter.step();
-}
+  enum class State_t
+  {
+    IDLE, CHAT_SLAVE
+  };
 
-} // namespace BASIC
+  struct Buffer_t
+  {
+    char data[40];
+    uint8_t position;
+  };
+
+  bool stepSlave();
+
+  BluetoothSerial *m_btSerial;
+
+  State_t m_state;
+
+  Buffer_t m_receive, m_send;
+
+	// Task interface
+public:
+
+	void init() override;
+
+	bool step() override;
+};

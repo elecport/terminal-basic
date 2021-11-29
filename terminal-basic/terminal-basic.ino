@@ -21,28 +21,48 @@
  */
 
 #include "basic_task.hpp"
-#include "maintask.hpp"
+#include "btchat_task.hpp"
 
-Task* activeTask;
-Task* newTask = nullptr;
+static Task* activeTask;
+static BASIC::HALProxyStream halproxyStream(0);
+
+static void _init()
+{
+  HAL_gfx_setmode(2);
+	halproxyStream.println("Select application:");
+	halproxyStream.println("1. Terminal-BASIC");
+  halproxyStream.println("2. Bluetooth chat");
+}
 
 void
 setup()
 {
-  HAL_initialize();
-
-  newTask = new MainTask;
+	HAL_initialize();
+	_init();
 }
 
 void
 loop()
 {
-  HAL_update();
-  if (newTask) {
-    delete activeTask;
-    activeTask = newTask;
-    newTask = nullptr;
-    activeTask->init();
-  }
-  activeTask->step();
+	HAL_update();
+	if (activeTask == nullptr) {
+		HAL_time_sleep_ms(10);
+		if (halproxyStream.available()) {
+			char c = halproxyStream.read();
+			if (c == '1')
+				activeTask = new BASIC::Task(halproxyStream);
+			else if (c == '2')
+				activeTask = new BTChat(halproxyStream);
+			else
+				return;
+		} else
+			return;
+		// POSTCONDITION: activeTask is a newly created task object
+		activeTask->init();
+	}
+	if (!activeTask->step()) {
+		delete activeTask;
+		activeTask = nullptr;
+		_init();
+	}
 }

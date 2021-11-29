@@ -20,44 +20,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "basic_task.hpp"
+#include "HALProxyStream.hpp"
 
-namespace BASIC
+/**
+ * @brief Dynamyc task base class
+ * 
+ * Tasks may be created and destroyed dynamically at run-time.
+ * allowing to create multiapp environment
+ */
+
+#pragma once
+
+class Task
 {
+protected:
 
-Task::Task(HALProxyStream& stream) :
-    ::Task(stream),
-    m_interpreter(m_halproxyStream, m_halproxyStream, BASIC::SINGLE_PROGSIZE)
-{
+	Task(BASIC::HALProxyStream&);
 
-#if CONF_MODULE_ARDUINOIO
-	m_interpreter.addModule(&m_arduinoio);
-#endif
-	
-#if USE_GFX
-	m_interpreter.addModule(&m_gfx);
-#endif
-	
-#if USEMATH
-	m_interpreter.addModule(&m_math);
-#endif
-	
-#if CONF_USE_EXTMEMFS
-	m_interpreter.setSDFSModule(&m_sdfs);
-	m_interpreter.addModule(&m_sdfs);
-#endif
-}
+  void getString(char*, uint8_t);
+	/**
+	 * Text I/O stream at the top of HAL terminal interface
+	 */
+	BASIC::HALProxyStream &m_halproxyStream;
 
-void
-Task::init()
-{
-	m_interpreter.init();
-}
+public:
 
-bool
-Task::step()
-{
-	return m_interpreter.step();
-}
-
-} // namespace BASIC
+	virtual ~Task() = default;
+	/**
+	 * Initialize task
+	 */
+	virtual void init() = 0;
+	/**
+	 * Task step
+	 * 
+	 * return task active flag
+	 */
+	virtual bool step() = 0;
+};

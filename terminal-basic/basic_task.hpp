@@ -24,6 +24,7 @@
 #define BASIC_TASK_HPP
 
 #include "basic.hpp"
+#include "task.hpp"
 
 #if CONF_USE_EXTMEMFS
 #include "basic_extmemfs.hpp"
@@ -44,26 +45,6 @@
 #include "basic_interpreter.hpp"
 #include "HALProxyStream.hpp"
 
-class Task
-{
-protected:
-	
-	Task();
-
-  BASIC::HALProxyStream m_halproxyStream;
-	
-public:
-
-  virtual ~Task() = default;
-	
-	virtual void init() = 0;
-
-	virtual void step() = 0;
-};
-
-extern Task* activeTask;
-extern Task* newTask;
-
 namespace BASIC
 {
 
@@ -73,38 +54,38 @@ namespace BASIC
 class Task : public ::Task
 {
 public:
-	
-	explicit Task();
 
-  ~Task() override = default;
-	
+	explicit Task(HALProxyStream&);
+
+	~Task() override = default;
+
 private:
-	
+
 #if CONF_MODULE_ARDUINOIO
 	ArduinoIO m_arduinoio;
 #endif
-	
+
 #if USEMATH
 	Math m_math;
 #endif
-	
+
 #if USE_GFX
 	GFXModule m_gfx;
 #endif
-	
+
 #if CONF_USE_EXTMEMFS
 	ExtmemFSModule m_sdfs;
 #endif
-	
+
 	// Interpreter object
 	Interpreter m_interpreter;
 
-  // Task interface
+	// Task interface
 public:
 
-  void init() override;
-  
-  void step() override;
+	void init() override;
+
+	bool step() override;
 };
 
 } // namespace BASIC

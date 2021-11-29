@@ -19,45 +19,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+ 
+#include "task.hpp"
+#include "ascii.hpp"
+#include <Arduino.h>
 
-#include "basic_task.hpp"
-
-namespace BASIC
+Task::Task(BASIC::HALProxyStream& stream):
+    m_halproxyStream(stream)
 {
-
-Task::Task(HALProxyStream& stream) :
-    ::Task(stream),
-    m_interpreter(m_halproxyStream, m_halproxyStream, BASIC::SINGLE_PROGSIZE)
-{
-
-#if CONF_MODULE_ARDUINOIO
-	m_interpreter.addModule(&m_arduinoio);
-#endif
-	
-#if USE_GFX
-	m_interpreter.addModule(&m_gfx);
-#endif
-	
-#if USEMATH
-	m_interpreter.addModule(&m_math);
-#endif
-	
-#if CONF_USE_EXTMEMFS
-	m_interpreter.setSDFSModule(&m_sdfs);
-	m_interpreter.addModule(&m_sdfs);
-#endif
 }
 
 void
-Task::init()
+Task::getString(char* buf, uint8_t size)
 {
-	m_interpreter.init();
+  uint8_t bufferPos = 0;
+  if (size == 0)
+    return;
+  while (true) {
+    HAL_time_sleep_ms(10);
+    HAL_update();
+    if (m_halproxyStream.available()) {
+      char c = m_halproxyStream.read();
+      if (c == char(ASCII::LF) || c == char(ASCII::CR)) {
+        buf[bufferPos] = '\0';
+        return;
+      } else if (c == char(ASCII::DEL)) {
+        if (bufferPos > 0) {
+          --bufferPos;
+          m_halproxyStream.write(c);
+        }
+      } else {
+        if (bufferPos < (size-1)) {
+          buf[bufferPos++] = c;
+          m_halproxyStream.write(c);
+        }
+      } // end if
+    } // end if
+  } // end while
 }
-
-bool
-Task::step()
-{
-	return m_interpreter.step();
-}
-
-} // namespace BASIC
