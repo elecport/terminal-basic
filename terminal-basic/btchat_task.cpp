@@ -29,8 +29,6 @@ BTChat::BTChat(BASIC::HALProxyStream& stream):
     Task(stream)
 {
   m_btSerial = new BluetoothSerial;
-  m_send.data[0] = '\0'; m_send.position = 0;
-  m_receive.data[0] = '\0'; m_receive.position = 0;
 }
 
 BTChat::~BTChat()
@@ -47,6 +45,11 @@ BTChat::init()
   m_halproxyStream.println("r. Create chat");
   m_halproxyStream.println("j. Request join to the chat");
   m_halproxyStream.println("q. Quit\e[0m");
+
+  m_startTime = HAL_time_gettime_ms();
+  m_send.data[0] = '\0'; m_send.position = 0;
+  m_receive.data[0] = '\0'; m_receive.position = 0;
+  m_state = State_t::IDLE;
 }
 
 bool
@@ -65,11 +68,12 @@ BTChat::step()
       this->getString(buf, 9);
       if (strlen(buf) > 0) {
         m_btSerial->begin(buf);
-        m_halproxyStream.print("\n\rUsing ID ");
+        m_halproxyStream.print("\r\nUsing ID ");
         m_halproxyStream.println(buf);
         HAL_time_sleep_ms(2000);
         HAL_gfx_setmode(1);
         m_state = State_t::CHAT_SLAVE;
+        m_halproxyStream.print("\e[23;1H________________________________________");
       } else {
         m_halproxyStream.print("\r\n\e[31mEmpty string!\e[0m");
         HAL_time_sleep_ms(2000);
@@ -86,28 +90,55 @@ BTChat::stepSlave()
   if (m_btSerial->available()) {
     char c = m_btSerial->read();
     if (c == char(ASCII::CR)) {
+      int t = HAL_time_gettime_ms() - m_startTime;
+      t /= 1000;
+      int mins = t / 60; int secs = t % 60;
       m_receive.data[m_receive.position] = '\0';
-      m_halproxyStream.print("\e[24;1H\e[33m");
-      m_halproxyStream.print(m_receive.data);
-      m_halproxyStream.println("\e[0m");
+      m_halproxyStream.print("\e[23;1H                                                                               ");
+      m_halproxyStream.print("\e[23;1H");
+      m_halproxyStream.print(mins, DEC);
+      m_halproxyStream.write(':');
+      m_halproxyStream.print(secs, DEC);
+      m_halproxyStream.write(' ');
+      m_halproxyStream.print("\e[32m");
+      m_halproxyStream.println(m_receive.data);
+      m_halproxyStream.print("\e[0m________________________________________");
       m_halproxyStream.print(m_send.data);
       m_receive.position = 0;
       m_receive.data[0] = '\0';
     } else if (c == char(ASCII::LF)) {
       // null
-    } else if (m_receive.position < 40){
+    } else if (m_receive.position < 39){
       m_receive.data[m_receive.position++] = c;
     }
   }
   if (m_halproxyStream.available()) {
     char c = m_halproxyStream.read();
     if (c == char(ASCII::CR)) {
+      if (m_send.position > 1 && m_send.data[0] == '\\') {
+        if (m_send.data[1] == 'q') {
+          m_state = State_t::IDLE;
+          init();
+          return true;
+        }
+      }
+      
       m_send.data[m_send.position] = '\0';
       m_btSerial->println(m_send.data);
 
-      m_halproxyStream.print("\e[24;1H\e[34m");
-      m_halproxyStream.print(m_send.data);
-      m_halproxyStream.println("\e[0m");
+      int t = HAL_time_gettime_ms() - m_startTime;
+      t /= 1000;
+      int mins = t / 60; int secs = t % 60;
+      m_receive.data[m_receive.position] = '\0';
+      m_halproxyStream.print("\e[23;1H                                                                               ");
+      m_halproxyStream.print("\e[23;1H");
+      m_halproxyStream.print(mins, DEC);
+      m_halproxyStream.write(':');
+      m_halproxyStream.print(secs, DEC);
+      m_halproxyStream.write(' ');
+      m_halproxyStream.print("\e[34m");
+      m_halproxyStream.println(m_send.data);
+      m_halproxyStream.print("\e[0m________________________________________");
       
       m_send.position = 0;
       m_send.data[0] = '\0';
@@ -121,7 +152,7 @@ BTChat::stepSlave()
         m_halproxyStream.write(' ');
         m_halproxyStream.write(char(ASCII::BS));
       }
-    } else if (m_send.position < 40) {
+    } else if (m_send.position < 39) {
       m_halproxyStream.write(c);
       m_send.data[m_send.position++] = c;
       m_send.data[m_send.position] = '\0';

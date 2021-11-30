@@ -53,6 +53,8 @@ private:
 
   Buffer_t m_receive, m_send;
 
+  uint32_t m_startTime;
+  
 	// Task interface
 public:
 
